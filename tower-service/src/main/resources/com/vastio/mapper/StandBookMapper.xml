@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vastio.mapper.StandBookMapper">
+    <insert id="addStandBook">
+        insert into standing_book (REGION, CODE, ATTRIBUTE, SITE_NAME, CONTRACT_NAME,
+                                   PHONE_NUMBER, OWNER_NAME, CONTRACT_START, CONTRACT_END,
+                                   PAY_TIME, START, END, RENT, TAX)
+        values (#{standBook.region}, #{standBook.code}, #{standBook.attribute},
+                                     #{standBook.siteName}, #{standBook.contractName}, #{standBook.phoneNumber},
+                                     #{standBook.ownerName}, #{standBook.contractStart}, #{standBook.contractEnd},
+                                     #{standBook.payTime}, #{standBook.start}, #{standBook.end}, #{standBook.rent},
+                #{standBook.tax})
+    </insert>
+    <insert id="addAllStandBooks">
+        insert into standing_book (REGION, CODE, ATTRIBUTE, SITE_NAME, CONTRACT_NAME,
+        PHONE_NUMBER, OWNER_NAME, CONTRACT_START, CONTRACT_END,
+        PAY_TIME, START, END, RENT, TAX)
+        values
+        <foreach collection="list" item="standBook" separator=",">
+            (#{standBook.region}, #{standBook.code}, #{standBook.attribute},
+            #{standBook.siteName}, #{standBook.contractName}, #{standBook.phoneNumber},
+            #{standBook.ownerName}, #{standBook.contractStart}, #{standBook.contractEnd},
+            #{standBook.payTime}, #{standBook.start}, #{standBook.end}, #{standBook.rent},
+            #{standBook.tax})
+        </foreach>
+    </insert>
+    <update id="updateStandBook">
+        update standing_book
+        <set>
+            <if test="standBook.region!=null">region=#{standBook.region},</if>
+            <if test="standBook.code!=null">code=#{standBook.code},</if>
+            <if test="standBook.attribute!=null">attribute=#{standBook.attribute},</if>
+            <if test="standBook.siteName!=null">site_name=#{standBook.siteName},</if>
+            <if test="standBook.contractName!=null">contract_name=#{standBook.contractName},</if>
+            <if test="standBook.phoneNumber!=null">phone_number=#{standBook.phoneNumber},</if>
+            <if test="standBook.ownerName!=null">owner_name=#{standBook.ownerName},</if>
+            <if test="standBook.contractStart!=null">contract_start=#{standBook.contractStart},</if>
+            <if test="standBook.contractEnd!=null">contract_end=#{standBook.contractEnd},</if>
+            <if test="standBook.payTime!=null">pay_time=#{standBook.payTime},</if>
+            <if test="standBook.start!=null">start=#{standBook.start},</if>
+            <if test="standBook.end!=null">end=#{standBook.end},</if>
+            <if test="standBook.rent!=null">rent=#{standBook.rent},</if>
+            <if test="standBook.tax!=null">tax=#{standBook.tax},</if>
+        </set>
+        where id=#{standBook.id}
+    </update>
+    <delete id="deleteStandBook">
+        delete from standing_book
+    </delete>
+    <delete id="deleteStandBookById">
+        delete from standing_book
+        where id = #{id}
+    </delete>
+    <select id="findStandBook" resultType="com.vastio.bean.model.StandBook">
+        select * from standing_book
+        <where>
+            <if test="param.region != null and param.region != ''">
+                region = #{param.region}
+            </if>
+            <if test="param.code != null and param.code != ''">
+                and code like '%${param.code}%'
+            </if>
+            <if test="param.siteName != null and param.siteName != ''">
+                and site_name like '%${param.siteName}%'
+            </if>
+            <if test="param.startTime != null and param.startTime != ''">
+                and <![CDATA[UNIX_TIMESTAMP(pay_time)*1000 >= #{param.startTime}]]>
+            </if>
+            <if test="param.endTime != null and param.endTime != ''">
+                and <![CDATA[UNIX_TIMESTAMP(pay_time)*1000 <= #{param.endTime}]]>
+            </if>
+        </where>
+    </select>
+    <select id="findToPayStandBook" resultType="com.vastio.bean.model.StandBook">
+        SELECT
+        *,MAX(CONTRACT_END),DATEDIFF(STR_TO_DATE(CONCAT(YEAR(NOW()),'-',DATE_FORMAT(CONTRACT_END,'%m-%d')),'%Y-%m-%d'),NOW())
+        num FROM standing_book
+        where CONTRACT_END > NOW()
+        AND NOW() > CONTRACT_START
+        AND DATEDIFF(STR_TO_DATE(CONCAT(YEAR(NOW()),'-',DATE_FORMAT(CONTRACT_END,'%m-%d')),'%Y-%m-%d'),NOW()) BETWEEN 1
+        AND 59
+        GROUP BY CODE
+    </select>
+    <select id="findOverTimePayStandBook" resultType="com.vastio.bean.model.StandBook">
+        select *
+        FROM standing_book
+        where pay_time &gt; end or (pay_time is null and (datediff(end, now()) &lt; 0))
+    </select>
+    <select id="findRenewContractStandBook" resultType="com.vastio.bean.model.StandBook">
+        SELECT c.*
+        FROM (SELECT *
+              from (SELECT
+                        CODE,
+                        MAX(CONTRACT_END) CONTRACT_END
+                    FROM standing_book
+                    GROUP BY CODE) a
+              WHERE DATEDIFF(a.CONTRACT_END, NOW()) &lt; 60)
+             b LEFT JOIN standing_book c on c.CODE = b.CODE AND c.CONTRACT_END = b.CONTRACT_END
+    </select>
+    <select id="findOrderByYear" resultType="java.util.Map">
+        SELECT
+            year,
+            region,
+            count(1)  count,
+            SUM(rent) rent,
+            AVG(rent) avg_rent,
+            SUM(tax)  tax
+        FROM (SELECT
+                  rent,
+                  tax,
+                  region,
+                  YEAR(PAY_TIME) year
+              FROM standing_book
+              WHERE PAY_TIME is not null) a
+        GROUP BY year, region
+        ORDER BY year, region
+    </select>
+    <select id="findOverTime" resultType="java.lang.Long">
+        select count(1) count
+        from overtime_contract
+    </select>
+    <select id="findToPay" resultType="java.lang.Long">
+        select count(1) count
+        from to_pay_contract
+    </select>
+    <select id="findRenew" resultType="java.lang.Long">
+        select count(1) count
+        from renew_contract
+    </select>
+</mapper>

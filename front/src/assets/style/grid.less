@@ -1,0 +1,284 @@
+@grid-columns: 12;
+@padding: 10px;
+@margin: 10px;
+
+.theme-white {
+  @import (multiple) './white-variables.less';
+  .border-box();
+}
+.theme-black {
+  @import (multiple) './black-variables.less';
+  .border-box();
+}
+/* ======================= base ======================= 基础 */
+.show {
+  display: block;
+}
+.shown {
+  display: block!important;
+}
+.hide {
+  display: none;
+}
+.hiden {
+  display: none!important;
+}
+.unvisible {
+  visibility: hidden;
+}
+.unvisiblen {
+  visibility: hidden!important;
+}
+/* ======================= box model ======================= 盒子模型 */
+.full-box {
+  width: 100%;
+  height: 100%;
+}
+.full-box-relation{
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.full-width{
+  width: 100%;
+}
+.full-height {
+  height: 100%;
+}
+.auto-height {
+  height: auto!important;
+}
+.vertical-padding {
+  padding-top: @padding;
+  padding-bottom: @padding;
+}
+.horizon-padding {
+  padding-right: @padding;
+  padding-left: @padding;
+}
+.top-padding {
+  padding-top: @padding;
+}
+.bottom-padding {
+  padding-bottom: @padding;
+}
+.left-padding {
+  padding-left: @padding;
+}
+.right-padding {
+  padding-right: @padding;
+}
+.notop-padding {
+  padding-top: 0!important;
+}
+.nobottom-padding {
+  padding-bottom: 0!important;
+}
+.noleft-padding {
+  padding-left: 0!important;
+}
+.noright-padding {
+  padding-right: 0!important;
+}
+.nohorizon-padding {
+  padding-left: 0!important;
+  padding-right: 0!important;
+}
+.novertical-padding {
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+}
+.all-padding {
+  padding: @padding;
+}
+.double-padding{
+  padding: @padding*2;
+}
+.no-padding {
+  padding: 0;
+}
+.vertical-margin {
+  margin-top: @margin;
+  margin-bottom: @margin;
+}
+.horizon-margin {
+  margin-right: @margin;
+  margin-left: @margin;
+}
+.top-margin {
+  margin-top: @margin;
+}
+.bottom-margin {
+  margin-bottom: @margin;
+}
+.left-margin {
+  margin-left: @margin;
+}
+.right-margin {
+  margin-right: @margin;
+}
+.notop-margin {
+  margin-top: 0!important;
+}
+.nobottom-margin {
+  margin-bottom: 0!important;
+}
+.noleft-margin {
+  margin-left: 0!important;
+}
+.noright-margin {
+  margin-right: 0!important;
+}
+.nohorizon-margin {
+  margin-left: 0!important;
+  margin-right: 0!important;
+}
+.novertical-margin {
+  margin-top: 0!important;
+  margin-bottom: 0!important;
+}
+.all-margin {
+  margin: @margin;
+}
+.double-margin{
+  margin: @margin*2;
+}
+.no-margin {
+  margin: 0;
+}
+.border-box() {
+  .all-border{
+    border-color: @base-border;
+  }
+  .vertical-border {
+    border: 0;
+    border-top: 1px solid @base-border;
+    border-bottom: 1px solid @base-border;
+  }
+  .horizon-border {
+    border: 0;
+    border-right: 1px solid @base-border;
+    border-left: 1px solid @base-border;
+  }
+  .top-border {
+    border: 0;
+    border-top: 1px solid @base-border;
+  }
+  .bottom-border {
+    border: 0;
+    border-bottom: 1px solid @base-border;
+  }
+  .left-border {
+    border: 0;
+    border-left: 1px solid @base-border;
+  }
+  .right-border {
+    border: 0;
+    border-right: 1px solid @base-border;
+  }
+}
+.notop-border {
+  border-top: 0!important;
+}
+.nobottom-border {
+  border-bottom: 0!important;
+}
+.noleft-border {
+  border-left: 0!important;
+}
+.noright-border {
+  border-right: 0!important;
+}
+.all-border {
+  border-width: 1px;
+  border-style: solid;
+}
+.no-border {
+  border: 0;
+}
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+.relative-position {
+  position: relative;
+}
+.absolute-position {
+  position: absolute;
+}
+/* ======================= flex ======================= 弹性盒模型 */
+.cell-primary {
+  display: -webkit-flex;
+  display:    -moz-flex;
+  display:     -ms-flex;
+  display:      -o-flex;
+  display:         flex;
+}
+.cell-primary-wrap {
+  flex-wrap: wrap;
+}
+.cell-primary-column {
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+}
+.cell-primary(12);
+.cell-primary(@flex-count) when (@flex-count > 0) {
+  .cell-primary-@{flex-count} {
+    -webkit-flex: @flex-count;
+    -moz-flex: @flex-count;
+    -ms-flex: @flex-count;
+    -o-flex: @flex-count;
+    flex: @flex-count;
+  }
+  .cell-primary(@flex-count - 1);
+}
+.center-self {
+  -ms-align-self: center;
+  align-self: center;
+}
+.center-items {
+  -ms-align-items: center;
+  align-items: center;
+}
+.stretch-self {
+  -ms-align-self: stretch;
+  align-self: stretch;
+}
+.stretch-items {
+  -ms-align-items: stretch;
+  align-items: stretch;
+}
+.baseline-items{
+  -ms-align-items: baseline;
+  align-items: baseline;
+}
+.center-justify {
+  -ms-justify-content: center;
+  justify-content: center;
+}
+.between-justify {
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+.around-justify {
+  -ms-justify-content: space-around;
+  justify-content: space-around;
+}
+/* ======================= grid ======================= 栅格 */
+.make-grid(@column-count) when (@column-count > 0) {
+  .col-grid-@{column-count} {
+    position: relative;
+    float: left;
+    width: percentage(@column-count / @grid-columns);
+  }
+  .make-grid(@column-count - 1);
+}
+.make-grid(12);
+

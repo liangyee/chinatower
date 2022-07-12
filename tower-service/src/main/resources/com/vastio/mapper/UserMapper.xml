@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vastio.mapper.UserMapper">
+    <sql id="columns">
+        ID,USERNAME,PASSWORD,ROLE
+    </sql>
+    <select id="findAll" resultType="com.vastio.bean.model.User">
+        SELECT
+        <include refid="columns"/>
+        FROM USER
+    </select>
+    <select id="findByName" parameterType="com.vastio.bean.model.User" resultType="com.vastio.bean.model.User">
+        SELECT
+        <include refid="columns"/>
+        FROM USER
+        <where>
+            <if test="username != null">
+               username = #{username}
+            </if>
+        </where>
+    </select>
+</mapper>

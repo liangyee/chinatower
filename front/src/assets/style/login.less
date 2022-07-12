@@ -1,0 +1,71 @@
+.login-wrapper {
+  background-image: url('/static/images/bg.jpg');
+  background-size: 100% 100%;
+  .logo {
+    width: 239px;
+    height: 75px;
+    background-image: url('/static/images/logo.png');
+    background-repeat: no-repeat;
+    float: left;
+    margin-top: 2%;
+    left: 5%;
+    position: relative;
+  }
+  .footer {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #333333;
+    position: fixed;
+    bottom: 50px;
+  }
+
+  .container {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    -ms-justify-content: center;
+    justify-content: center;
+    -ms-align-items: center;
+    align-items: center;
+    .card-box {
+      width: 400px;
+      margin-top: 8%;
+      padding: 20px;
+
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      background-color: rgba(0, 0, 0, .5);
+      background-clip: padding-box;
+    }
+  }
+
+  .title {
+    margin: 0px auto 40px auto;
+
+    text-align: center;
+
+    color: #505458;
+  }
+
+  .formLogin-title {
+    text-align: center;
+
+    color: #fff;
+  }
+
+  .formLogin-title h3 {
+    font-size: 18px;
+  }
+
+  .login-no-bottom {
+    margin-bottom: 10px;
+  }
+}

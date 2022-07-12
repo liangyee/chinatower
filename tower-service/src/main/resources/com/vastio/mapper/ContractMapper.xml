@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vastio.mapper.ContractMapper">
+    <insert id="createToPayContract">
+        INSERT INTO to_pay_contract
+        (region, code, site_name,contract_name,contract_start,contract_end)
+        VALUES
+        <foreach collection="list" item="standBook" separator=",">
+            (#{standBook.region}, #{standBook.code},
+            #{standBook.siteName},#{standBook.contractName},
+            #{standBook.contractStart},#{standBook.contractEnd})
+        </foreach>
+    </insert>
+    <insert id="createOverTimeContract">
+        INSERT INTO overtime_contract
+        (region, code, site_name,contract_name,contract_start,contract_end,start,end,pay_time)
+        VALUES
+        <foreach collection="list" item="standBook" separator=",">
+            (#{standBook.region}, #{standBook.code},
+            #{standBook.siteName},#{standBook.contractName},
+            #{standBook.contractStart},#{standBook.contractEnd},
+            #{standBook.start},#{standBook.end},#{standBook.payTime})
+        </foreach>
+    </insert>
+    <insert id="createRenewContract">
+        insert into renew_contract
+        (region, code, site_name, contract_name, contract_start, contract_end)
+        values
+        <foreach collection="list" item="standBook" separator=",">
+            (#{standBook.region}, #{standBook.code},
+            #{standBook.siteName}, #{standBook.contractName},
+            #{standBook.contractStart}, #{standBook.contractEnd})
+        </foreach>
+    </insert>
+    <delete id="deleteAllToPayContract">
+        delete from to_pay_contract
+    </delete>
+    <delete id="deleteAllRenewContract">
+        delete from renew_contract
+    </delete>
+    <delete id="deleteAllOverTimeContract">
+        delete from overtime_contract
+    </delete>
+    <select id="getToPayContract" resultType="com.vastio.bean.model.RenewContract">
+        select * from to_pay_contract
+        <where>
+            <if test="siteName != null and siteName != ''">
+                site_name like '%${siteName}%'
+            </if>
+        </where>
+    </select>
+    <select id="getOverPayContract" resultType="com.vastio.bean.model.OverTimeContract">
+        select * from overtime_contract
+        <where>
+            <if test="siteName != null and siteName != ''">
+                site_name like '%${siteName}%'
+            </if>
+            <if test="flag == 0">
+                and pay_time is null
+            </if>
+            <if test="flag == 1">
+                and pay_time is not null
+            </if>
+        </where>
+    </select>
+    <select id="getRenewContract" resultType="com.vastio.bean.model.RenewContract">
+        select * from renew_contract
+        <where>
+            <if test="siteName != null and siteName != ''">
+                site_name like '%${siteName}%'
+            </if>
+        </where>
+    </select>
+</mapper>
